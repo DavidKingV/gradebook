@@ -1,0 +1,23 @@
+{
+    "name": "esmefis/gradebook",
+    "description": "Sistema que permite a los estudiantes acceder a sus calificaciones y a otra información académica relevante como sus calificaciónes.",
+    "type": "project",
+    "require": {
+        "vlucas/phpdotenv": "^5.6",
+        "firebase/php-jwt": "^6.10",
+        "mpdf/mpdf": "^8.2"
+    },
+    "license": "freemium",
+    "autoload": {
+        "psr-4": {
+            "Esmefis\\Gradebook\\": "backend/config/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DavidKingV",
+            "email": "qet135ui@hotmail.com"
+        }
+    ],
+    "minimum-stability": "alpha"
+}
