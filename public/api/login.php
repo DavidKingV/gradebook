@@ -20,7 +20,11 @@ switch ($action) {
 
         break;
     case 'logout':
-        $controller->logout();
+        $sessionController = new SessionManager();
+        $response = $sessionController->endSession();
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
         break;
     default:
         echo json_encode(['error' => 'Invalid action']);
