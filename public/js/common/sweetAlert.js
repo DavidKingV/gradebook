@@ -12,7 +12,7 @@ export function loadingAlert() {
 }
 
 export function successAlert(message) {
-    Swal.fire({
+    return Swal.fire({
         icon: 'success',
         title: 'Completado',
         text: message,
@@ -30,6 +30,23 @@ export function errorAlert(message) {
 export function confirmAlert(message, confirmButtonText, cancelButtonText, confirmCallback) {
     Swal.fire({
         title: '¿Estás seguro de realizar esta acción?',
+        text: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: cancelButtonText,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            confirmCallback();
+        }
+    });
+}
+
+export function confirmCloseSession(message, confirmButtonText, cancelButtonText, confirmCallback) {
+    Swal.fire({
+        title: 'Cerrar sesión',
         text: message,
         icon: 'warning',
         showCancelButton: true,
