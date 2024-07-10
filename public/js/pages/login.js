@@ -12,7 +12,7 @@ $(function() {
 
     $("#openInNewWindow").on("click", function(event) {
         event.preventDefault();
-        openInNewWindow("api/microsoftLogin.php");
+        openInNewWindow("api/MicrosoftLogin.php");
     });
 
     $("#loginForm").on("submit", function(event) {
