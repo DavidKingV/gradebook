@@ -1,13 +1,13 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../../backend/controllers/loginController.php';
+require_once __DIR__ . '/../../backend/controllers/SessionController.php';
 
 use Esmefis\Gradebook\DBConnection;
 
 $action = $_POST['action'];
 
 $connection = new DBConnection();
-$controller = new LoginControl($connection);
+$controller = new LoginController($connection);
 
 
 switch ($action) {
@@ -20,7 +20,7 @@ switch ($action) {
 
         break;
     case 'logout':
-        $sessionController = new SessionManager();
+        $sessionController = new SessionController ();
         $response = $sessionController->endSession();
 
         header('Content-Type: application/json');
