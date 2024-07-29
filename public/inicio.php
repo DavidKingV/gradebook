@@ -6,23 +6,19 @@ session_start();
 use Esmefis\Gradebook\verifyAuth;
 use Esmefis\Gradebook\DBConnection;
 use Esmefis\Gradebook\GetUserData;
+use Esmefis\Gradebook\getEnv;
 
 $dbConnection = new DBConnection();
 $connection = $dbConnection->getConnection();
-
-$uName = '';
-$uEmail = '';
 
 if(isset($_COOKIE['LoSessionToken'])){
     $verifyLocalSession = verifyAuth::LocalSession($_COOKIE['LoSessionToken']);
 
     $uID = $verifyLocalSession['uID'];
-
+    
     $localSessionData = new GetUserData($connection);
     $userData = $localSessionData->getLocalUserData($uID);
 
-    $uName = $userData['userName'];
-    $uEmail = $userData['email'];
 } else if (isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
     $verifyMicrosoftSession = verifyAuth::MicrosoftSession($_SESSION["adnanhussainturki/microsoft"]["accessToken"]);
 
@@ -30,8 +26,6 @@ if(isset($_COOKIE['LoSessionToken'])){
     $microsoftSessionData = new GetUserData($connection);
     $userData = $microsoftSessionData->getMicrosoftUserData($accessToken);
 
-    $uName = $userData['userName'] ?? '';
-    $uEmail = $userData['userEmail'] ?? '';
 } else if (!isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
     header('Location: login.html?sessionMicrosoft=expired');
     exit;
@@ -39,8 +33,6 @@ if(isset($_COOKIE['LoSessionToken'])){
     header('Location: login.html?session=expired');
     exit;
 }
-
-var_dump($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -82,10 +74,13 @@ var_dump($_SESSION);
             <section class="py-5">
                 <div class="container px-5 mb-5">
                     <div class="text-center mb-5">
-                        <h1 class="display-5 fw-bolder mb-0"><span class="text-gradient d-inline">Bienvenid@, <?php echo $uName ?></span></h1>
+                        <h1 class="display-5 fw-bolder mb-0"><span class="text-gradient d-inline">Bienvenid@, <?php echo $_SESSION["userName"] ?></span></h1>
+                        <div class="text-center py-2">
+                            <img src="<?php echo $_SESSION["userPhoto"]?>" alt="Profile Photo" class="rounded-circle" width="120" height="120">
+                        </div>
                     </div>
                     <div class="row gx-5 justify-content-center">
-                        <div class="col-lg-11 col-xl-9 col-xxl-8">
+                        <div class="col-lg-6 col-md-6 mb-5">
                             <!-- Project Card 1-->
                             <div class="card overflow-hidden shadow rounded-4 border-0 mb-5">
                                 <div class="card-body p-0">
@@ -99,6 +94,8 @@ var_dump($_SESSION);
                                     </div>
                                 </div>
                             </div>
+                       </div>    
+                       <div class="col-lg-6 col-md-6 mb-5"> 
                             <!-- Project Card 2-->
                             <div class="card overflow-hidden shadow rounded-4 border-0">
                                 <div class="card-body p-0">
@@ -120,8 +117,8 @@ var_dump($_SESSION);
             <section class="py-5 bg-gradient-primary-to-secondary text-white">
                 <div class="container px-5 my-5">
                     <div class="text-center">
-                        <h2 class="display-4 fw-bolder mb-4">Let's build something together</h2>
-                        <a class="btn btn-outline-light btn-lg px-5 py-3 fs-6 fw-bolder" href="contact.html">Contact me</a>
+                        <h2 class="display-4 fw-bolder mb-4">"El éxito es de todos, tú decides"</h2>
+                        <!--<a class="btn btn-outline-light btn-lg px-5 py-3 fs-6 fw-bolder" href="contact.html">Mi perfil</a>-->
                     </div>
                 </div>
             </section>
@@ -130,7 +127,7 @@ var_dump($_SESSION);
         <footer class="bg-white py-4 mt-auto">
             <div class="container px-5">
                 <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0">Copyright &copy; Your Website 2023</div></div>
+                <div class="col-auto"><div class="small m-0">Copyright &copy; Esmefis 2024</div></div>
                     <div class="col-auto">
                         <a class="small" href="https://esmefis.edu.mx/aviso-de-privacidad/">Aviso de privacidad</a>
                         <!--<span class="mx-1">&middot;</span>
@@ -150,6 +147,6 @@ var_dump($_SESSION);
         <!-- SweetAlert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Core theme JS-->
-        <script type="module" src="js/pages/inicio.js"></script>
+        <script type="module" src="js/common/closeSession.js"></script>
     </body>
 </html>
