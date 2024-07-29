@@ -46,10 +46,10 @@ $(function() {
         if (event.data.accessToken) {
             // Guardar el accessToken en la sesión o cookie si es necesario
             // Redirigir a inicio.php
-            window.location.href = 'inicio.php?accessToken=' + event.data.accessToken;
+            window.location.href = 'inicio.php';
         } else if (event.data.error) {
             // Manejar errores de autenticación
-            alert('Authentication failed');
+            errorAlert(event.data.error);
         } else{
             // Manejar otros mensajes
             alert('Unknown message');
