@@ -27,7 +27,7 @@ class verifyAuth {
 
         $microsoftAccessToken = $_SESSION["adnanhussainturki/microsoft"]["accessToken"] ?? NULL;
 
-        if(isset($microsoftAccessToken)){
+        if($microsoftAccessToken){
             if($accessToken == $microsoftAccessToken):
                 return array('success' => true, 'accessToken' => $microsoftAccessToken);
             else:
