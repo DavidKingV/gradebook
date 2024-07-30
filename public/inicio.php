@@ -88,7 +88,7 @@ if(isset($_COOKIE['LoSessionToken'])){
                                         <div class="p-5">
                                             <h2 class="fw-bolder">Calificaciones</h2>
                                             <p>En esta sección podrás consultar tus calificaciones que hayan sido registradas en el sistema.</p>
-                                            <a href="#" class="btn btn-primary">Ver mis calificaciones</a>
+                                            <a href="calificaciones.php" class="btn btn-primary">Ver mis calificaciones</a>
                                         </div>
                                         <img class="img-fluid" src="assets/grades.jpg" alt="..." />
                                     </div>
