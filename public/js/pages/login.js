@@ -52,7 +52,7 @@ $(function() {
             errorAlert(event.data.error);
         } else{
             // Manejar otros mensajes
-            alert('Unknown message');
+            errorAlert("Error desconocido, por favor intente de nuevo");
         }
     }, false);
 
