@@ -5,6 +5,7 @@ require_once __DIR__ . '/../models/LoginModel.php';
 
 use Esmefis\Gradebook\getEnv;
 use Esmefis\Gradebook\DBConnection;
+use Esmefis\Gradebook\GetUserData;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
@@ -38,6 +39,9 @@ class LoginController{
         $userData = $this->loginModel->getUserData($user);
 
         if ($userData) {
+            $dbConnection = new DBConnection();
+            $connection = $dbConnection->getConnection();
+            $guserData = new GetUserData($connection);
             
             $stored_password = $userData['password'];
             $stored_hashed_password = $userData['hashed_password'];
@@ -52,12 +56,14 @@ class LoginController{
                     return array("success" => false, "message" => "Error al actualizar la contraseña, por favor intente de nuevo más tarde");
                 } else {
                     SessionModel::startSession($userData['student_id'], $user);
+                    $guserData->getLocalUserData($userData['student_id']);
                     return array("success" => true, "message" => "Inicio de sesión exitoso (y contraseña actualizada)", "uID" => $userData['student_id']);
                 }
                 
             } elseif ($stored_hashed_password !== null && password_verify($password, $stored_hashed_password)) {
                 // La contraseña está hashada en la base de datos y coincide con la contraseña proporcionada
                 SessionModel::startSession($userData['student_id'], $user);
+                $guserData->getLocalUserData($userData['student_id']);
                 return array("success" => true, "message" => "Inicio de sesión exitoso", "uID" => $userData['student_id']);
             } else {
                 // La contraseña no coincide
