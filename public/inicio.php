@@ -4,28 +4,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 use Esmefis\Gradebook\verifyAuth;
-use Esmefis\Gradebook\DBConnection;
-use Esmefis\Gradebook\GetUserData;
-use Esmefis\Gradebook\getEnv;
-
-$dbConnection = new DBConnection();
-$connection = $dbConnection->getConnection();
 
 if(isset($_COOKIE['LoSessionToken'])){
     $verifyLocalSession = verifyAuth::LocalSession($_COOKIE['LoSessionToken']);
-
-    $uID = $verifyLocalSession['uID'];
-    
-    $localSessionData = new GetUserData($connection);
-    $userData = $localSessionData->getLocalUserData($uID);
-
 } else if (isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
     $verifyMicrosoftSession = verifyAuth::MicrosoftSession($_SESSION["adnanhussainturki/microsoft"]["accessToken"]);
-
-    $accessToken = $verifyMicrosoftSession['accessToken'];
-    $microsoftSessionData = new GetUserData($connection);
-    $userData = $microsoftSessionData->getMicrosoftUserData($accessToken);
-
 } else if (!isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
     header('Location: login.html?sessionMicrosoft=expired');
     exit;
@@ -33,6 +16,7 @@ if(isset($_COOKIE['LoSessionToken'])){
     header('Location: login.html?session=expired');
     exit;
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -62,9 +46,10 @@ if(isset($_COOKIE['LoSessionToken'])){
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Calificaciones</a></li>
+                            <li class="nav-item"><a class="nav-link" href="inicio.php">Inicio</a></li>
+                            <li class="nav-item"><a class="nav-link" href="calificaciones.php">Calificaciones</a></li>
                             <li class="nav-item"><a class="nav-link disabled" href="">Horarios</a></li>
-                            <li class="nav-item"><a class="nav-link" href="projects.html">Microsoft Teams</a></li>
+                            <li class="nav-item"><a class="nav-link" href="https://teams.microsoft.com/v2/">Microsoft Teams</a></li>
                             <li class="nav-item"><a id="closeSession" class="nav-link" href="#">Cerrar sesión</a></li>
                         </ul>
                     </div>
