@@ -28,25 +28,7 @@ class UserRepository {
         $stmt->close();
         return $user;
     }
-
-    public function findMicrosoftUserByAccessToken($accessToken){
-        $stmt = $this->connection->prepare("SELECT * FROM microsoft_users WHERE microsoft_access_token = ?");
-        if ($stmt === false) {
-            throw new \Exception($this->connection->error);
-        }
-
-        $stmt->bind_param("s", $accessToken);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        $user = null;
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-        }
-
-        $stmt->close();
-        return $user;
-    }
+    
 }
 
 class GetUserData{
@@ -65,7 +47,6 @@ class GetUserData{
 
             $_SESSION['userName'] = $user['nombre'];
             $_SESSION['userEmail'] = $user['email'];
-            $_SESSION['userId'] = $user['id'];
             $_SESSION['userPhone'] = $user['telefono'];
             $_SESSION['userPhoto'] = $_ENV['DEFAULT_PROFILE_PHOTO'];
 
@@ -100,8 +81,18 @@ class GetUserData{
             // Guardar datos en variables de sesión
             $_SESSION['userName'] = $userData['displayName'];
             $_SESSION['userEmail'] = $userData['mail'];
-            $_SESSION['userId'] = $userData['id'];
+            $_SESSION['userMicrosoft'] = $userData['id'];
             $_SESSION['userPhoto'] = 'data:image/jpeg;base64,' . $photo ?? $_ENV['DEFAULT_PROFILE_PHOTO'];
+
+            $userId = "SELECT student_id FROM microsoft_students WHERE id = ?";
+            $stmt = $this->connection->prepare($userId);
+            $stmt->bind_param('s', $userData['id']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $stmt->close();
+
+            if ($result->num_rows == 1):$_SESSION['studentID'] = $result->fetch_assoc()['student_id'];
+            endif;
 
             return;
             
