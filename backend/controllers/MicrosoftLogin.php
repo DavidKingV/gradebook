@@ -11,7 +11,7 @@ use myPHPnotes\Microsoft\Handlers\Session;
 
 $dbConnection = new DBConnection();
 $connection = $dbConnection->getConnection();
-$userData = new GetUserData($connection);
+$userData = new getUserData($connection);
 
 $microsoft = new Auth(Session::get("tenant_id"),Session::get("client_id"),  Session::get("client_secret"), Session::get("redirect_uri"), Session::get("scopes"));
 
