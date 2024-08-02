@@ -76,13 +76,20 @@ class GetUserData{
                     'Accept' => 'image/jpeg'
                 ]
             ]);
+            if ($photoResponse->getStatusCode() === 200) {
+                $photo = base64_encode($photoResponse->getBody()->getContents());
+                $url = 'data:image/jpeg;base64,' . $photo;
+            } else {
+                // Si la respuesta no es exitosa, usar la URL por defecto
+                $url = $_ENV['DEFAULT_PROFILE_PHOTO'];
+            }
             $photo = base64_encode($photoResponse->getBody()->getContents());
 
             // Guardar datos en variables de sesión
             $_SESSION['userName'] = $userData['displayName'];
             $_SESSION['userEmail'] = $userData['mail'];
             $_SESSION['userMicrosoft'] = $userData['id'];
-            $_SESSION['userPhoto'] = 'data:image/jpeg;base64,' . $photo ?? $_ENV['DEFAULT_PROFILE_PHOTO'];
+            $_SESSION['userPhoto'] = $url;
 
             $userId = "SELECT student_id FROM microsoft_students WHERE id = ?";
             $stmt = $this->connection->prepare($userId);
