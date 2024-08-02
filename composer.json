@@ -22,5 +22,8 @@
             "email": "qet135ui@hotmail.com"
         }
     ],
-    "minimum-stability": "alpha"
+    "minimum-stability": "alpha",
+    "config": {
+        "platform-check": false
+    }
 }
