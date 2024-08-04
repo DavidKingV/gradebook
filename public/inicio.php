@@ -27,7 +27,7 @@ if(isset($_COOKIE['LoSessionToken'])){
         <meta name="author" content="" />
         <title>Gradebook - Inicio</title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="assets/esmefis_icon.ico" />
         <!-- Custom Google font-->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
