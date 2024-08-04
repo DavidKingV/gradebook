@@ -10,10 +10,10 @@ if(isset($_COOKIE['LoSessionToken'])){
 } else if (isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
     $verifyMicrosoftSession = verifyAuth::MicrosoftSession($_SESSION["adnanhussainturki/microsoft"]["accessToken"]);
 } else if (!isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
-    header('Location: login.html?sessionMicrosoft=expired');
+    header('Location: login.php?sessionMicrosoft=expired');
     exit;
 } else {
-    header('Location: login.html?session=expired');
+    header('Location: login.php?session=expired');
     exit;
 }
 
