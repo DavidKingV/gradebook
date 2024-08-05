@@ -5,21 +5,12 @@ session_start();
 
 use Esmefis\Gradebook\verifyAuth;
 
-if(isset($_COOKIE['LoSessionToken'])){
-    $verifyLocalSession = verifyAuth::LocalSession($_COOKIE['LoSessionToken']);
-    if($verifyLocalSession['success'] && $verifyLocalSession['uID'] != NULL){
-        header('Location: inicio.php?session=restored');
-        exit;
-    }
-} else if (isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
-    $verifyMicrosoftSession = verifyAuth::MicrosoftSession($_SESSION["adnanhussainturki/microsoft"]["accessToken"]);
-    if($verifyMicrosoftSession['success']){
-        header('Location: inicio.php?session=restored');
-        exit;
-    }
-} else {
-    header('Location: login.html?session=expired');
-    exit;
+$verifyLocalSession = verifyAuth::LocalSession($_COOKIE['LoSessionToken'] ?? null);
+$verifyMicrosoftSession = verifyAuth::MicrosoftSession($_SESSION["adnanhussainturki/microsoft"]["accessToken"] ?? null);
+
+if($verifyLocalSession['success'] || $verifyMicrosoftSession['success']){
+    header('Location: inicio.php?session=restored');
+    exit();
 }
 ?>
 
