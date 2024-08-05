@@ -29,12 +29,12 @@ $("#closeSession").on("click", function(){
 
                         window.addEventListener('message', function(event) {
                             if (event.data.success) {
-                                window.location.href = "login.html";
+                                window.location.href = "login.php";
                                 successAlert(event.data.message);
                             }
                         }, false);
                     }
-                    window.location.href = "login.html";
+                    window.location.href = "login.php";
                 } else {
                     errorAlert(data.message);
                 }
