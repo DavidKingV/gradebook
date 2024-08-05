@@ -11,6 +11,14 @@ export function loadingAlert() {
     })
 }
 
+export function loadingSpinner(show, element) {
+    if (show) {
+        $(element).append('<div class="d-flex justify-content-center py-5"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+    } else {
+        $(element).empty();
+    }
+}
+
 export function successAlert(message) {
     return Swal.fire({
         icon: 'success',
