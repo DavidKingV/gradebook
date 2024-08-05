@@ -48,7 +48,7 @@ if(isset($_COOKIE['LoSessionToken'])){
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
                             <li class="nav-item"><a class="nav-link" href="inicio.php">Inicio</a></li>
                             <li class="nav-item"><a class="nav-link" href="calificaciones.php">Calificaciones</a></li>
-                            <li class="nav-item"><a class="nav-link disabled" href="">Horarios</a></li>
+                            <li class="nav-item"><a class="nav-link" href="horarios.php">Horarios</a></li>
                             <li class="nav-item"><a class="nav-link" href="https://teams.microsoft.com/v2/">Microsoft Teams</a></li>
                             <li class="nav-item"><a id="closeSession" class="nav-link" href="#">Cerrar sesión</a></li>
                         </ul>
