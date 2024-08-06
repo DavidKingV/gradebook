@@ -88,7 +88,7 @@ if(isset($_COOKIE['LoSessionToken'])){
                                         <div class="p-5">
                                             <h2 class="fw-bolder">Horarios</h2>
                                             <p>En esta sección podrás consultar los horarios de tus clases, según las tengas programadas.</p>
-                                            <a href="#" class="btn btn-primary disabled">Ver mis horarios</a>
+                                            <a href="horarios.php" class="btn btn-primary">Ver mis horarios</a>
                                         </div>
                                         <img class="img-fluid" src="assets/horarios.jpg" alt="..." />
                                     </div>
