@@ -11,7 +11,7 @@ $tenant = $_ENV['TENANT_ID'];
 $client_id = $_ENV['CLIENT_ID'];
 $client_secret = $_ENV['CLIENT_SECRET'];
 $callback = $_ENV['CALLBACK_URL'];
-$scopes = ["User.Read"];
+$scopes = ["User.Read", "Calendars.Read"];
 
 $microsoft = new Auth($tenant, $client_id,  $client_secret, $callback, $scopes);
 
