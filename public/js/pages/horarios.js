@@ -65,7 +65,7 @@ $(function() {
                                     class="img-fluid mb-4 mr-3"
                                     alt="Empty"
                                     />
-                                    <h3><strong>No tienes clases programas próximamente</strong></h3>
+                                    <h3><strong>No tienes clases programadas próximamente</strong></h3>
                                     <h4>Si crees que hace falta algo, comunícate con la administración</h4>
                                     <a href="inicio.php" class="btn btn-primary cart-btn-transform m-3" data-abc="true">
                                     Volver al inicio
