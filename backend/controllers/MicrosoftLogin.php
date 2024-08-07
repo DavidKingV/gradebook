@@ -1,7 +1,8 @@
 <?php
-session_start();
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/SessionController.php';
+
+session_start();
 
 use Esmefis\Gradebook\DBConnection;
 use Esmefis\Gradebook\getUserData;
@@ -21,22 +22,23 @@ try {
     $user = (new User);
 
     if($user->data) {
-        $userName = $user->data->getDisplayName();
-        $userEmail = $user->data->getMail();
+      
+        $responseData = $userData->getMicrosoftUserData($tokens->access_token);
+        $userData->getProfilePhotoMicrosoft($tokens->access_token);
 
-        if($userName && $userEmail) {
-            $userData->getMicrosoftUserData($tokens->access_token);
+        if ($responseData['success']) {
             echo "<script>
-                window.opener.postMessage({ accessToken: '{$tokens->access_token}' }, '*');
-                window.close();
-            </script>";
-        } else {
-            throw new Exception('User data cannot be saved in the database');
+                    window.opener.postMessage({ accessToken: '{$tokens->access_token}' }, '*');
+                    window.close();
+                </script>";
+        }else{
+            throw new Exception($responseData['message']);
         }
 
     } else {
         throw new Exception('User data not found');
     }
+    
 } catch (Exception $e) {
     echo "<script>
         window.opener.postMessage({ error: '{$e->getMessage()}' }, '*');
