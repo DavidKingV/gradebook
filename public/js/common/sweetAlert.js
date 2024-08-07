@@ -35,6 +35,15 @@ export function errorAlert(message) {
     })
 }
 
+export function errorAlertTimer(message) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: message,
+        showConfirmButton: false
+    })
+}
+
 export function confirmAlert(message, confirmButtonText, cancelButtonText, confirmCallback) {
     Swal.fire({
         title: '¿Estás seguro de realizar esta acción?',
