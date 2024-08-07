@@ -1,4 +1,4 @@
-import { loadingSpinner,errorAlert } from '../common/sweetAlert.js';
+import { loadingSpinner,errorAlert, errorAlertTimer } from '../common/sweetAlert.js';
 import { enviarPeticionAjax } from '../common/ajax.js';
 
 let phpPath = "api/Schedules.php";
@@ -41,7 +41,7 @@ $(function() {
                 $('#section-sched').append(htmlCard);
                 });
             } else if(data[0].message === "Token expirado") {
-                errorAlert("Su sesión ha expirado, serás redirigido al inicio de sesión");
+                errorAlertTimer("Su sesión ha expirado, serás redirigido al inicio de sesión");
                 setTimeout(() => {
                     openInNewWindow("api/MicrosoftLogin.php");
                 }, 3000);
