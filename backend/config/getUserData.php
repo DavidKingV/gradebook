@@ -57,9 +57,14 @@ class GetUserData{
 
     }
 
-    public function getMicrosoftUserData($accessToken){
-        $client = new Client();
+    public function getMicrosoftUserData($accessToken) {
 
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $client = new Client();
+    
         try {
             // Obtener datos del usuario
             $userResponse = $client->get('https://graph.microsoft.com/v1.0/me', [
@@ -68,7 +73,55 @@ class GetUserData{
                 ]
             ]);
             $userData = json_decode($userResponse->getBody()->getContents(), true);
+    
+            if ($userData === null) {
+                return ['success' => false, 'message' => 'Error al decodificar la respuesta de la API'];
+            }else{
+                $_SESSION['userMicrosoft'] = $userData['id'];
+                $_SESSION['userName'] = $userData['displayName'];
+                $_SESSION['userEmail'] = $userData['mail'];
+            }
+            
+            // Consulta SQL para obtener el ID del estudiante
+            $userId = "SELECT student_id FROM microsoft_students WHERE id = ?";
+            $stmt = $this->connection->prepare($userId);
+            
+            $stmt->bind_param('s', $userData['id']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+                if (!empty($row['student_id'])) {
+                    $_SESSION['studentID'] = $row['student_id'];
+                }
+            }
+    
+            $stmt->close();
+            
+            return ['success' => true, 'message' => 'Datos obtenidos correctamente'];
+    
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $statusCode = $e->getResponse()->getStatusCode();
+            if ($statusCode == 401) {
+                return ['success' => false, 'message' => 'Error de autenticación: ' . $e->getMessage()];
+            } else if ($statusCode == 404) {
+                return ['success' => false, 'message' => 'Error del cliente: ' . $e->getMessage()];
+            } else {
+                return ['success' => false, 'message' => 'Error inesperado: ' . $e->getMessage()];
+            }
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            return ['success' => false, 'message' => 'Error en la solicitud: ' . $e->getMessage()];
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => 'Error en la consulta SQL: ' . $e->getMessage()];
+        }
+    }
+    
 
+    public function getProfilePhotoMicrosoft($accessToken) {
+        $client = new Client();
+    
+        try {
             // Obtener foto del usuario
             $photoResponse = $client->get('https://graph.microsoft.com/v1.0/me/photo/$value', [
                 'headers' => [
@@ -76,50 +129,31 @@ class GetUserData{
                     'Accept' => 'image/jpeg'
                 ]
             ]);
-            if ($photoResponse->getStatusCode() === 200) {
-                $photo = base64_encode($photoResponse->getBody()->getContents());
-                $url = 'data:image/jpeg;base64,' . $photo;
-            } else {
-                // Si la respuesta no es exitosa, usar la URL por defecto
-                $url = $_ENV['DEFAULT_PROFILE_PHOTO'];
-            }
             $photo = base64_encode($photoResponse->getBody()->getContents());
-
-            // Guardar datos en variables de sesión
-            $_SESSION['userName'] = $userData['displayName'];
-            $_SESSION['userEmail'] = $userData['mail'];
-            $_SESSION['userMicrosoft'] = $userData['id'];
+            $url = 'data:image/jpeg;base64,' . $photo;
+    
             $_SESSION['userPhoto'] = $url;
-
-            $userId = "SELECT student_id FROM microsoft_students WHERE id = ?";
-            $stmt = $this->connection->prepare($userId);
-            $stmt->bind_param('s', $userData['id']);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->close();
-
-            if ($result->num_rows == 1):$_SESSION['studentID'] = $result->fetch_assoc()['student_id'];
-            endif;
-
-            return;
-            
+            return ['success' => true, 'message' => 'Foto de perfil obtenida correctamente'];
+    
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            // Manejo de errores específico para códigos de estado HTTP
             $statusCode = $e->getResponse()->getStatusCode();
             if ($statusCode == 401) {
-                // Error de autenticación
-                return ['success' => false, 'message' => 'Unauthorized. Please check your access token.'];
+                return ['success' => false, 'message' => 'Error de autenticación: ' . $e->getMessage()];
+            } else if ($statusCode == 404) {
+                $_SESSION['userPhoto'] = $_ENV['DEFAULT_PROFILE_PHOTO'];
+                return ['success' => true , 'message' => 'Sin foto de perfil, usando la foto por defecto'];
             } else {
-                // Otros errores de cliente
-                return ['success' => false, 'message' => 'Client error: ' . $e->getMessage()];
+                return ['success' => false, 'message' => 'Error del cliente: ' . $e->getMessage()];
             }
         } catch (\GuzzleHttp\Exception\ServerException $e) {
-            // Manejo de errores del servidor
-            return ['success' => false, 'message' => 'Server error: ' . $e->getMessage()];
+            return ['success' => false, 'message' => 'Error del servidor: ' . $e->getMessage()];
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            return ['success' => false, 'message' => 'Error en la solicitud: ' . $e->getMessage()];
         } catch (\Exception $e) {
-            // Manejo de otros errores
-            return ['success' => false, 'message' => 'Unexpected error: ' . $e->getMessage()];
+            return ['success' => false, 'message' => 'Error inesperado: ' . $e->getMessage()];
         }
     }
+    
+    
     
 }
