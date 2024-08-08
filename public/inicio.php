@@ -16,7 +16,6 @@ if(isset($_COOKIE['LoSessionToken'])){
     header('Location: login.php?session=expired');
     exit;
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -132,6 +131,25 @@ if(isset($_COOKIE['LoSessionToken'])){
         <!-- SweetAlert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Core theme JS-->
+        <script type="module" src="js/pages/inicio.js"></script>
         <script type="module" src="js/common/closeSession.js"></script>
     </body>
 </html>
+
+<!-- Modal -->
+<div class="modal modal-xl" id="TyCModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="TyCModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="TyCModalLabel">Reglamento General De Estudiantes De Esmefis, Centro Universitario</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <?php include "../backend/views/StudentRegulations.php" ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  id="acceptTyC" disabled class="btn btn-success">He leido y acepto el reglamento</button>
+      </div>
+    </div>
+  </div>
+</div>
