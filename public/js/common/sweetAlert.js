@@ -27,6 +27,14 @@ export function successAlert(message) {
     })
 }
 
+export function infoAlert(message) {
+    Swal.fire({
+        icon: 'info',
+        title: 'Información',
+        text: message,
+    })
+}
+
 export function errorAlert(message) {
     Swal.fire({
         icon: 'error',
