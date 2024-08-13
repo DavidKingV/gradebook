@@ -97,6 +97,29 @@ if(isset($_COOKIE['LoSessionToken'])){
                     </div>
                 </div>
             </section>
+
+            <section>
+                <div class="container px-5 mb-5">                
+                    <div class="row gx-5 justify-content-center">
+                        <div class="col-lg-6 col-md-6 mb-5">
+                            <!-- Project Card 1-->
+                            <div class="card overflow-hidden shadow rounded-4 border-0 mb-5">
+                                <div class="card-body p-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="p-5">
+                                            <h2 class="fw-bolder">Mis horas practicas</h2>
+                                            <p>En esta sección podrás solicitar horas practicas dependiendo la disponibilidad.</p>
+                                            <a href="horas-practicas.php" class="btn btn-primary disabled">Solicitar practicas</a>
+                                        </div>
+                                        <img class="img-fluid" src="assets/practicas.jpg" alt="..." />
+                                    </div>
+                                </div>
+                            </div>
+                       </div>                           
+                    </div>
+                </div>
+            </section>
+
             <!-- Call to action section-->
             <section class="py-5 bg-gradient-primary-to-secondary text-white">
                 <div class="container px-5 my-5">
