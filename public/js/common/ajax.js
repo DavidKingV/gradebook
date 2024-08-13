@@ -5,3 +5,12 @@ export function enviarPeticionAjax(url, metodo, datos) {
         data: datos
     });
 }
+
+export function enviarPeticionJson(url, metodo, datos) {
+    return $.ajax({
+        url: url,
+        type: metodo,
+        contentType: 'application/json',
+        data: JSON.stringify(datos)
+    });
+}
