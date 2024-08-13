@@ -29,13 +29,41 @@ class StartModel{
     }
 
     public function aceptarTyC($userID) {
-        $sql = "UPDATE tyc SET accepted = 1 WHERE studentID = ?";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bind_param('i', $userID);
+        // Verificar si ya existe un registro con el studentID
+        $sqlCheck = "SELECT COUNT(*) FROM tyc WHERE studentID = ?";
+        $stmtCheck = $this->connection->prepare($sqlCheck);
+        $stmtCheck->bind_param('i', $userID);
+        $stmtCheck->execute();
+        $stmtCheck->bind_result($count);
+        $stmtCheck->fetch();
+        $stmtCheck->close();
 
-        $stmt->execute();
-        $stmt->close();
-
-        return true;
+        if ($count > 0) {
+            // Si existe un registro, se hace un UPDATE
+            $sqlUpdate = "UPDATE tyc SET accepted = 1 WHERE studentID = ?";
+            $stmtUpdate = $this->connection->prepare($sqlUpdate);
+            $stmtUpdate->bind_param('i', $userID);
+            $stmtUpdate->execute();
+            
+            if ($stmtUpdate->affected_rows === 0) {
+                $stmtUpdate->close();
+                return null;
+            } else {
+                return true;
+            }
+        } else {
+            // Si no existe un registro, se hace un INSERT
+            $sqlInsert = "INSERT INTO tyc (studentID, accepted) VALUES (?, 1)";
+            $stmtInsert = $this->connection->prepare($sqlInsert);
+            $stmtInsert->bind_param('i', $userID);
+            $stmtInsert->execute();
+            
+            if ($stmtInsert->affected_rows === 0) {
+                $stmtInsert->close();
+                return null;
+            } else {
+                return true;
+            }
+        }
     }
 }
