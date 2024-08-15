@@ -8,7 +8,8 @@
         "mpdf/mpdf": "^8.2",
         "adnanhussainturki/microsoft-api-php": "^0.04.0",
         "guzzlehttp/guzzle": "^7.8",
-        "setasign/fpdf": "1.8"
+        "setasign/fpdf": "1.8",
+        "google/apiclient": "2.15.0"
     },
     "license": "freemium",
     "autoload": {
