@@ -76,10 +76,10 @@ async function getHours(fecha) {
 $(document).ready(function(){
 
     calendarInstance = fullCalendar(element, {
-        googleCalendarApiKey: 'AIzaSyAe_BI44HkMi0RcG0vMekz0mmQAWaytaP4',
+        googleCalendarApiKey: '',
 
         events:{
-            googleCalendarId: '0f5aa447aa1449099b33991265cd3ab6c5160d29754f6c20df46f6e2d061c21c@group.calendar.google.com',
+            googleCalendarId: '',
             className: 'alert alert-primary',
         },
 
