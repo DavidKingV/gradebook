@@ -109,7 +109,7 @@ if(isset($_COOKIE['LoSessionToken'])){
                                         <div class="p-5">
                                             <h2 class="fw-bolder">Mis horas practicas</h2>
                                             <p>En esta sección podrás solicitar horas practicas dependiendo la disponibilidad.</p>
-                                            <a href="horas-practicas.php" class="btn btn-primary disabled">Solicitar practicas</a>
+                                            <a href="horas-practicas.php" class="btn btn-primary">Solicitar practicas</a>
                                         </div>
                                         <img class="img-fluid" src="assets/practicas.jpg" alt="..." />
                                     </div>
