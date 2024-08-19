@@ -5,6 +5,8 @@ session_start();
 
 use Esmefis\Gradebook\verifyAuth;
 
+$day = date('N');
+
 if(isset($_COOKIE['LoSessionToken'])){
     $verifyLocalSession = verifyAuth::LocalSession($_COOKIE['LoSessionToken']);
 } else if (isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
@@ -14,6 +16,12 @@ if(isset($_COOKIE['LoSessionToken'])){
     exit;
 } else {
     header('Location: login.php?session=expired');
+    exit;
+}
+
+//comprobar que el dia de la semana sea viernes
+if($day != 5){
+    include '../backend/views/RejetCalendar.php';
     exit;
 }
 
@@ -122,7 +130,7 @@ if(isset($_COOKIE['LoSessionToken'])){
                     <p class="card-text">Fecha y hora actual: <?php echo date('d-m-Y H:i'); ?></p>
                     <div class="mb-3">
                         <label for="studentName" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="studentName" readonly onkeydown="return false;" onmousedown="return false;" value="<?php echo $_SESSION['userName'] ?>">
+                        <input type="text" class="form-control" name="studentName" id="studentName" readonly onkeydown="return false;" onmousedown="return false;" value="<?php echo $_SESSION['userName'] ?>">
                     </div>
                     <div class="row g-3">
                         <div class="col-4">
@@ -142,7 +150,15 @@ if(isset($_COOKIE['LoSessionToken'])){
                     <div class="mb-3 py-3">
                         <label for="activity" class="form-label">Actividad solicitada:</label>
                         <input type="text" class="form-control" id="activity" readonly onkeydown="return false;" onmousedown="return false;" value="Practicas clinicas">
-                    </div>                    
+                    </div>   
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="practiceCheck">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Acepto que he leído el programa de prácticas clínicas en ESMEFIS CENTRO UNIVERSITARIO
+                        </label>
+                        <br>
+                        <a href="https://cuharvard-my.sharepoint.com/:w:/g/personal/centrouniversitarioh_cuharvard_onmicrosoft_com/EQnhuUiOPStJulJmOeB410IBn7oYZv6qyAM5zD56lWxedg?e=lF14Zg" target="_blank">Ver el documento</a>
+                    </div>                 
                 </div>
             </div>
         </div>
