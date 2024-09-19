@@ -14,7 +14,7 @@ class PaymentsModel {
 
         $query = "SELECT * FROM students_payments WHERE id_student = ? ORDER BY payment_date DESC";
         $payments = $this->connection->prepare($query);
-        $userId = $_SESSION['userId'] ?? $_SESSION['studentID'];
+        $userId = $_SESSION['userId'] ?? $_SESSION['studentID'] ?? $_SESSION['uID'];
         $payments->bind_param('i', $userId);
 
         $payments->execute();
