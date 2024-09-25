@@ -9,7 +9,9 @@
         "adnanhussainturki/microsoft-api-php": "^0.04.0",
         "guzzlehttp/guzzle": "^7.8",
         "setasign/fpdf": "1.8",
-        "google/apiclient": "2.15.0"
+        "google/apiclient": "2.15.0",
+        "mercadopago/dx-php": "^3.0",
+        "stripe/stripe-php": "^15.11@beta"
     },
     "license": "freemium",
     "autoload": {
