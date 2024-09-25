@@ -34,4 +34,22 @@ class PaymentsController{
         }
         return $data;
     }
+
+    public function getPaymentsAmount(){
+        $payments = $this->paymentsModel->getPaymentsAmount();
+        if ($payments !== null) {
+            $row = $payments->fetch_assoc();
+           
+            $data = [
+                'success' => true,
+                'monthly_amount' => intval($row['monthly_amount'])
+            ];
+        }else{
+            $data = [
+                'success' => false,
+                'message' => 'No se encontraron datos'
+            ];
+        }
+        return $data;
+    }
 }

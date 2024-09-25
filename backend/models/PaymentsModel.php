@@ -26,4 +26,17 @@ class PaymentsModel {
         $payments->close();
         return $result;
     }
+
+    public function getPaymentsAmount() {
+        $query = "SELECT monthly_amount FROM students_payments_amounts";
+        $payments = $this->connection->prepare($query);
+        $payments->execute();
+        $result = $payments->get_result();
+        if ($result->num_rows === 0) {
+            return null;
+        }
+        
+        $payments->close();
+        return $result;
+    }
 }
