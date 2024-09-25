@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
+include '../backend/payments/MercadoLibre/Preferences.php';
 
 session_start();
 
@@ -35,6 +36,7 @@ if(isset($_COOKIE['LoSessionToken'])){
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/stripeButton.css" rel="stylesheet" />
     </head>
     <body class="d-flex flex-column h-100 bg-light">
         <main class="flex-shrink-0">
@@ -67,7 +69,7 @@ if(isset($_COOKIE['LoSessionToken'])){
                                 <h2 class="text-primary fw-bolder mb-0">Lista de pagos realizados</h2>
                                 <!-- Download resume button-->
                                 <!-- Note: Set the link href target to a PDF file within your project-->
-                                <button class="btn btn-primary px-4 py-3" id="newPayment" >
+                                <button class="btn btn-primary px-4 py-3" id="newPayment" data-bs-toggle="modal" data-bs-target="#MlModal">
                                     <div class="d-inline-block bi bi-credit-card-fill"></div>
                                     Realizar nuevo pago 
                                 </button>
@@ -123,7 +125,55 @@ if(isset($_COOKIE['LoSessionToken'])){
                     </div>
                 </div>
             </div>
-        </footer>
+        </footer>        
+
+        <!-- Modal -->
+        <div class="modal fade modal-lg" id="MlModal" aria-labelledby="MlModalLabel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="MlModalLabel">Realizar pago nuevo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <select class="form-select" id="methodSelect" name="methodSelect">
+                            <option selected value="0">¿Deseas factura?</option>
+                            <option value="1">Solicitar factura</option>
+                            <option value="2">No, solo recibo</option>
+                        </select>
+                        <button class="btn btn-outline-success" type="button" id="chooseMethod">Pagar</button>
+                    </div>  
+                    <div id="wallet_container"> </div>      
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- stripe Modal-->
+
+        <div class="modal fade modal-lg" id="stripeModal" aria-labelledby="stripeModalLabel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="stripeModalLabel">Realizar pago nuevo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="checkout">
+                        <!-- Checkout will insert the payment form here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
          <!-- jquery -->
          <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
          <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js" integrity="sha256-J8ay84czFazJ9wcTuSDLpPmwpMXOm573OUtZHPQqpEU=" crossorigin="anonymous"></script>
@@ -136,10 +186,17 @@ if(isset($_COOKIE['LoSessionToken'])){
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Core theme JS-->
         <script type="module" src="js/pages/pagos.js"></script>
+        <script>window.preferencesId = '<?php echo $preference->id ?? null ?>'</script>
         <script type="module" src="js/common/closeSession.js"></script>
+        <script type="module" src="js/common/Stripe/checkout.js"></script>
         <!-- jspDF -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+        <!-- Mercado Pago -->
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
+        <!-- Stripe -->
+        <script src="https://js.stripe.com/v3/"></script>
     </body>
 </html>
