@@ -5,7 +5,7 @@ require_once __DIR__ . '/SessionController.php';
 session_start();
 
 use Esmefis\Gradebook\DBConnection;
-use Esmefis\Gradebook\getUserData;
+use Esmefis\Gradebook\GetUserData;
 use myPHPnotes\Microsoft\Models\User;
 use myPHPnotes\Microsoft\Auth;
 use myPHPnotes\Microsoft\Handlers\Session;
