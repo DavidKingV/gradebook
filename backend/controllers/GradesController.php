@@ -35,7 +35,7 @@ class GradesController {
         } else {
             $data[] = array(
                 'success' => false,
-                'message' => 'No se encontraron calificaciones para el usuario'
+                'message' => 'No se encontraron calificaciones'
             );
         }
         return $data;

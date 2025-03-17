@@ -17,7 +17,6 @@ if(isset($_COOKIE['LoSessionToken'])){
     exit;
 }
 
-print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="es">
