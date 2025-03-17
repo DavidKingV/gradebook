@@ -17,7 +17,7 @@ if(isset($_COOKIE['LoSessionToken'])){
     exit;
 }
 
-echo $_SESSION['studentID'] ?? $_SESSION['uID'] ?? $_SESSION;
+print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="es">
