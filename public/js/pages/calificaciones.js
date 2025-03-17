@@ -70,9 +70,36 @@ $(function() {
                 return '<h6>'+row.subject_name+'</h6><p>'+row.subject_child_name+'</p>';
             }
         }, 'className': 'text-center' },
-        { data: 'continuous_grade', 'className': 'text-center' },
-        { data: 'exam_grade', 'className': 'text-center' },
-        { data: 'final_grade', 'className': 'text-center' },
+        { data: 'continuous_grade', render: function(data, type, row) { 
+            if(data < 6){
+                return '<span class="badge bg-danger">No aprobado</span>';
+            } else if (data >= 6 && data < 7){
+                return '<span class="badge bg-warning">Aprobado</span>';
+            } else {
+                return '<span class="badge bg-success">Aprobado</span>';
+            }
+        }, 'className': 'text-center' },
+        //{ data: 'continuous_grade', 'className': 'text-center' },
+        { data: 'exam_grade', render: function(data, type, row) { 
+            if(data < 6){
+                return '<span class="badge bg-danger">No aprobado</span>';
+            } else if (data >= 6 && data < 7){
+                return '<span class="badge bg-warning">Aprobado</span>';
+            } else {
+                return '<span class="badge bg-success">Aprobado</span>';
+            }
+        }, 'className': 'text-center' },
+        //{ data: 'exam_grade', 'className': 'text-center' },
+        { data: 'final_grade', render: function(data, type, row) { 
+            if(data < 6){
+                return '<span class="badge bg-danger">No aprobado</span>';
+            } else if (data >= 6 && data < 7){
+                return '<span class="badge bg-warning">Aprobado</span>';
+            } else {
+                return '<span class="badge bg-success">Aprobado</span>';
+            }
+        }, 'className': 'text-center' },
+        //{ data: 'final_grade', 'className': 'text-center' },
         { data: null, render: function(data, type, row) { return getCuatrimestre(row.update_at) }, 'className': 'text-center' },
     ]);
 

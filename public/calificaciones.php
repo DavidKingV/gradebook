@@ -67,11 +67,11 @@ if(isset($_COOKIE['LoSessionToken'])){
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h2 class="text-primary fw-bolder mb-0">Lista completa</h2>
                                 <!-- Download resume button-->
-                                <!-- Note: Set the link href target to a PDF file within your project-->
+                                <!-- Note: Set the link href target to a PDF file within your project
                                 <button class="btn btn-primary px-4 py-3" id="generate" >
                                     <div class="d-inline-block bi bi-download me-2"></div>
                                     Generar Tirilla
-                                </button>
+                                </button>-->
                             </div>
                             <!-- Experience Card 1-->
                             <div class="card shadow border-0 rounded-4 mb-5">
