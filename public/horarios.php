@@ -80,7 +80,10 @@ if(isset($_COOKIE['LoSessionToken'])){
                             </div>
                         </div>
                     </div>
-                </div>-->
+                </div>-->            
+            </section>
+            <section id="calendar-container" class="container px-5 mb-5">
+                <div id="calendar"></div>
             </section>
             <!-- Call to action section-->
         </main>
@@ -99,6 +102,22 @@ if(isset($_COOKIE['LoSessionToken'])){
                 </div>
             </div>
         </footer>
+
+        <div class="modal fade" id="eventDetails" aria-labelledby="eventDetails" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="eventDetailsLabel"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="eventDetailsBody">
+                    
+                </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- jquery -->
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js" integrity="sha256-J8ay84czFazJ9wcTuSDLpPmwpMXOm573OUtZHPQqpEU=" crossorigin="anonymous"></script>
@@ -107,6 +126,9 @@ if(isset($_COOKIE['LoSessionToken'])){
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- SweetAlert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!--fullcalendar-->
+        <script src="js/common/fullcalendar/dist/index.global.js"></script>
+        <script src="js/common/fullcalendar/packages/google-calendar/index.global.js"></script>
         <!-- Core theme JS-->
         <script type="module" src="js/pages/horarios.js"></script>
         <script type="module" src="js/common/closeSession.js"></script>

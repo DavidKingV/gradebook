@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 session_start();
 
+use Esmefis\Gradebook\DBConnection;
 use Esmefis\Gradebook\getEnv;
 use Esmefis\Gradebook\GetDateTime;
 use GuzzleHttp\Client;
@@ -11,6 +12,12 @@ use GuzzleHttp\Exception\RequestException;
 getEnv::cargar();
 
 class ScheduleModel {
+    private $connection;
+
+    public function __construct(DBConnection $dbConnection) {
+        $this->connection = $dbConnection->getConnection();
+    }
+
     public static function getSchedules() {
         $client = new Client();
     
@@ -57,6 +64,76 @@ class ScheduleModel {
                 // Puedes manejar otros tipos de errores aquí
                 return array(['success' => false, 'message' => 'Error en la solicitud: ' . $e->getMessage()]);
             }
+        }
+    }
+
+    public function getEvents($groupId){
+        try{
+            $sql = "SELECT * FROM schedules WHERE id_group = ?";
+            $stmt = $this->connection->prepare($sql);
+
+            if(!$stmt){
+                throw new Exception('Error al preparar la consulta');
+            }
+
+            $stmt->bind_param('i', $groupId);
+
+            if (!$stmt->execute()) {
+                throw new Exception("Error ejecutando sentencia " . $stmt->error);
+            }
+
+            $result = $stmt->get_result();
+
+            if($result->num_rows === 0){
+                return ['success' => false, 'message' => 'No se encontraron eventos'];
+            }
+
+            $events = [];
+
+            foreach($result as $row){
+                $events[] = [
+                    'id'      => $row['id'],
+                    'title'   => $row['title'], // título del rowo mostrado en calendario
+                    'start'   => $row['date'] . 'T' . $row['start'],
+                    'end'     => $row['date'] . 'T' . $row['end'],
+                    'allDay'  => false,
+                ];
+            }
+
+            return ['success' => true, 'events' => $events];
+
+        }catch(\Exception $e){
+            return ['success' => false, 'message' => 'Error en la consulta SQL: ' . $e->getMessage()];
+        }
+    }
+
+    public function getEventDetails($eventId){
+        try{
+            $sql = "SELECT * FROM schedules WHERE id = ?";
+            $stmt = $this->connection->prepare($sql);
+
+            if(!$stmt){
+                throw new Exception('Error al preparar la consulta');
+            }
+
+            $stmt->bind_param('i', $eventId);
+
+            if (!$stmt->execute()) {
+                throw new Exception("Error ejecutando sentencia " . $stmt->error);
+            }
+
+            $result = $stmt->get_result();
+
+            if($result->num_rows === 0){
+                return ['success' => false, 'message' => 'No se encontraron eventos'];
+            }
+
+            $event = $result->fetch_assoc();
+
+            return ['success' => true, 'event' => $event];
+
+        }catch(\Exception $e){
+            return ['success' => false, 'message' => 'Error en la consulta SQL: ' . $e->getMessage()];
         }
     }
 }

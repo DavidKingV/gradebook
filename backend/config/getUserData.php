@@ -47,6 +47,7 @@ class GetUserData{
 
             $_SESSION['userName'] = $user['nombre'];
             $_SESSION['userEmail'] = $user['email'];
+            $_SESSION['groupId'] = $user['id_group'];
             $_SESSION['userPhone'] = $user['telefono'];
             $_SESSION['userPhoto'] = $_ENV['DEFAULT_PROFILE_PHOTO'];
 

@@ -3,6 +3,8 @@ import { enviarPeticionAjax } from '../common/ajax.js';
 
 let phpPath = "api/Schedules.php";
 
+const calendarEl = $("#calendar")[0];
+
 function utcToLocal(utcDate) {
     var localDate = new Date(utcDate);
     //resta 6 horas para ajustar a la hora de México
@@ -14,7 +16,7 @@ function openInNewWindow(url) {
     window.open(url, '_blank', 'width=800,height=600');
 }
 
-$(function() {
+$(function() {    
 
     loadingSpinner(true, '#section-sched');
 
@@ -45,7 +47,84 @@ $(function() {
                 setTimeout(() => {
                     openInNewWindow("api/MicrosoftLogin.php");
                 }, 3000);
-            }   
+            }   else if(data[0].message === "Cuenta local") {
+
+                window.calendar = new FullCalendar.Calendar(calendarEl, {
+                    
+                    events: {
+                        url: 'api/Schedules.php?action=getEvents',
+                        method: 'GET',
+                        failure: function() {
+                            alert('Error al cargar eventos');
+                        },
+                        success: function(response) {
+                            if(response.success){
+                                return response.events;
+                            }else{
+                                return [];
+                            }
+                        },
+                        color: '#f9cb7d',
+                        display: 'block',
+                        textColor: '#0951f5',
+                    },
+                
+                    themeSystem: 'bootstrap5',
+                    selectable: false,
+                
+                    initialView: 'dayGridWeek',
+                    views:{
+                        dayGridWeek:{
+                            duration: { days: 8 },
+                        }
+                    },
+                    timeZone: 'local',
+                    locale: 'es',
+                        
+                    hiddenDays: [ 6 ],
+                
+                    displayEventEnd: true,
+                
+                    businessHours: [ // specify an array instead
+                        {
+                            daysOfWeek: [ 1, 2, 3, 4, 5 ], 
+                            startTime: '09:00', 
+                            endTime: '17:00' 
+                        },
+                        {
+                            daysOfWeek: [ 7 ], 
+                            startTime: '08:00', 
+                            endTime: '14:00' 
+                        }
+                    ],
+                    headerToolbar: {
+                        start: 'title', // will normally be on the left. if RTL, will be on the right
+                        center: '',
+                        end: '' // will normally be on the right. if RTL, will be on the left
+                    },
+                    dateClick: async  function(info) {
+                        /*$("#addEventModalLabel").html('Agregar alumno para el '+info.dateStr+'');
+                        $("#addEventModal").modal('show');
+                        $.post('../modals/addEvent.Modal.php', { date: info.dateStr }, function (data) {
+                            $('#addEventModalBody').html(data);
+                        });*/
+                    },
+                
+                    eventClick: async function(info) {
+                        info.jsEvent.preventDefault();
+                        $("#eventDetailsBody").html('');
+                        loadingSpinner(true, '#eventDetailsBody');
+                        $('#eventDetails').modal('show');
+                        
+                        $("#eventDetailsLabel").html(info.event.title);
+                        await $.post('modals/eventDetails.Modal.php', { eventId: info.event._def.publicId, eventData: info.event._instance }, function (data) {                
+                            $('#eventDetailsBody').html(data);
+                        });
+                    },
+                });
+
+                window.calendar.render();
+            }
             else {
                 errorAlert(data[0].message);
 
