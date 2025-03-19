@@ -1,7 +1,9 @@
 import { loadingSpinner,errorAlert, errorAlertTimer } from '../common/sweetAlert.js';
 import { enviarPeticionAjax } from '../common/ajax.js';
+import { initializeDataTable } from '../common/datatables.js';
 
 let phpPath = "api/Schedules.php";
+let groupPath = "api/Group.php";
 
 const calendarEl = $("#calendar")[0];
 
@@ -55,7 +57,7 @@ $(function() {
                         url: 'api/Schedules.php?action=getEvents',
                         method: 'GET',
                         failure: function() {
-                            alert('Error al cargar eventos');
+                            errorAlert('Error al cargar eventos');
                         },
                         success: function(response) {
                             if(response.success){
@@ -72,10 +74,15 @@ $(function() {
                     themeSystem: 'bootstrap5',
                     selectable: false,
                 
-                    initialView: 'dayGridWeek',
+                    height: 'auto',
+                    allDaySlot: false,
+                    initialView: 'timeGridFourDay',
                     views:{
-                        dayGridWeek:{
+                        timeGridFourDay:{
+                            type: 'timeGrid',
                             duration: { days: 8 },
+                            slotMinTime: '09:00:00',
+                            slotMaxTime: '18:00:00'
                         }
                     },
                     timeZone: 'local',
@@ -178,5 +185,24 @@ $(function() {
                 errorAlert("Error desconocido, por favor intente de nuevo");
             }
         }, false);
+
+
+
+        initializeDataTable('#groupMaterialTable', groupPath, { action: 'getGroupMaterial' }, [
+            { data: 'name', 'className': 'text-center' },
+            {
+                data: 'url',
+                className: 'text-center',
+                render: function(data, type, row) {
+                    // Define la longitud máxima que quieres mostrar
+                    const maxLength = 30;
+                    let displayText = data;
+                    if (data.length > maxLength) {
+                        displayText = data.substring(0, maxLength) + '...';
+                    }
+                    return `<a href="${data}" target="_blank">${displayText}</a>`;
+                }
+            },
+        ]);
 
 });

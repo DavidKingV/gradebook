@@ -59,7 +59,7 @@ if(isset($_COOKIE['LoSessionToken'])){
             <section class="py-5">
                 <div class="container px-5 mb-5">
                     <div class="text-center mb-5">
-                        <h1 class="display-5 fw-bolder mb-0"><span class="text-gradient d-inline">Mis horarios de clases</span></h1>                        
+                        <h1 class="display-5 fw-bolder mb-0"><span class="text-gradient d-inline">Mis horarios y materiales de clases</span></h1>                        
                     </div>                    
                 </div>
             </section>
@@ -83,7 +83,38 @@ if(isset($_COOKIE['LoSessionToken'])){
                 </div>-->            
             </section>
             <section id="calendar-container" class="container px-5 mb-5">
-                <div id="calendar"></div>
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Lista de eventos</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>                        
+                </div>
+            </section>
+            <section id="calendar-container" class="container px-5 mb-5">
+
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Materiales de clase</h6>
+                    </div>
+                    <div class="card-body">
+                        <table id="groupMaterialTable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Enlace</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>                        
+            </div>
             </section>
             <!-- Call to action section-->
         </main>
@@ -103,7 +134,7 @@ if(isset($_COOKIE['LoSessionToken'])){
             </div>
         </footer>
 
-        <div class="modal fade" id="eventDetails" aria-labelledby="eventDetails" aria-hidden="true">
+        <div class="modal fade modal-xl" id="eventDetails" aria-labelledby="eventDetails" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -126,6 +157,8 @@ if(isset($_COOKIE['LoSessionToken'])){
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- SweetAlert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- datables -->
+        <script src="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.js"></script>
         <!--fullcalendar-->
         <script src="js/common/fullcalendar/dist/index.global.js"></script>
         <script src="js/common/fullcalendar/packages/google-calendar/index.global.js"></script>

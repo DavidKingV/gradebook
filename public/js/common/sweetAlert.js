@@ -27,6 +27,16 @@ export function successAlert(message) {
     })
 }
 
+export function successAlertAuto(message) {
+    return Swal.fire({
+        icon: 'success',
+        title: 'Completado',
+        text: message,
+        timer: 1500,
+        showConfirmButton: false
+    })
+}
+
 export function infoAlert(message) {
     Swal.fire({
         icon: 'info',

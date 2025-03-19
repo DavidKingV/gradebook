@@ -1,5 +1,5 @@
 import { enviarPeticionAjax } from '../common/ajax.js';
-import { loadingAlert, successAlert, errorAlert } from '../common/sweetAlert.js';
+import { loadingAlert, successAlertAuto, errorAlert } from '../common/sweetAlert.js';
 
 var phpPath = "api/login.php";
 
@@ -26,11 +26,9 @@ $(function() {
             .done(function(data) {
                 Swal.close();
                 if (data.success) {
-                    successAlert(data.message)
-                    .then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "inicio.php";
-                        }
+                    successAlertAuto(data.message)
+                    .then(() => {
+                        window.location.href = 'inicio.php';
                     });
                 } else {
                     errorAlert(data.message);
