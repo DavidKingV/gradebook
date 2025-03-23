@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-session_start();
+//session_start();
 
 use Esmefis\Gradebook\DBConnection;
 use Esmefis\Gradebook\getEnv;
@@ -51,6 +51,32 @@ class GroupModel {
             return $materials;
         } catch(Exception $e) {
             return array(['success' => false, 'message' => 'Error al obtener los materiales de este grupo' . $e->getMessage()]);
+        }
+    }
+
+    public function verifyTypeGroup($groupId) {
+        try {
+            $sql = "SELECT g.*, c.nombre, c.subarea FROM groups AS g INNER JOIN carreers AS c ON g.id_carreer = c.id WHERE g.id = ?";
+            $stmt = $this->connection->prepare($sql);
+            
+            if(!$stmt) {
+                throw new Exception("Error al preparar la consulta");
+            }
+
+            $stmt->bind_param('i', $groupId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows === 0) {
+                return array(['success' => false, 'message' => 'No se encontró el grupo']);
+            }
+            
+            $row = $result->fetch_assoc();
+            $stmt->close();
+
+            return ['success' => true, 'type' => $row['subarea']];
+        } catch(Exception $e) {
+            return array(['success' => false, 'message' => 'Error al obtener el tipo de grupo' . $e->getMessage()]);
         }
     }
     

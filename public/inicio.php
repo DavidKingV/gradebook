@@ -1,12 +1,20 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../backend/models/GroupModel.php';
 
 session_start();
 
 use Esmefis\Gradebook\verifyAuth;
+use Esmefis\Gradebook\DBConnection;
+
+$connection = new DBConnection();
+$groupModel = new GroupModel($connection);
 
 if(isset($_COOKIE['LoSessionToken'])){
     $verifyLocalSession = verifyAuth::LocalSession($_COOKIE['LoSessionToken']);
+    $verifyTypeGroup = $groupModel->verifyTypeGroup($_SESSION['groupId']); 
+    
+    $groupType = $verifyTypeGroup['type'];
 } else if (isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
     $verifyMicrosoftSession = verifyAuth::MicrosoftSession($_SESSION["adnanhussainturki/microsoft"]["accessToken"]);
 } else if (!isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
@@ -63,6 +71,9 @@ if(isset($_COOKIE['LoSessionToken'])){
                             <img src="<?php echo $_SESSION["userPhoto"]?>" alt="Profile Photo" class="rounded-circle" width="120" height="120">
                         </div>
                     </div>
+
+                    <?php 
+                    if($groupType != 'Diplomados'){?>
                     <div class="row gx-5 justify-content-center">
                         <div class="col-lg-6 col-md-6 mb-5">
                             <!-- Project Card 1-->
@@ -79,6 +90,8 @@ if(isset($_COOKIE['LoSessionToken'])){
                                 </div>
                             </div>
                        </div>    
+                       <?php } ?>
+
                        <div class="col-lg-6 col-md-6 mb-5"> 
                             <!-- Project Card 2-->
                             <div class="card overflow-hidden shadow rounded-4 border-0">
@@ -98,6 +111,8 @@ if(isset($_COOKIE['LoSessionToken'])){
                 </div>
             </section>
 
+            <?php 
+            if($groupType != 'Diplomados'){?>
             <section>
                 <div class="container px-5 mb-5">                
                     <div class="row gx-5 justify-content-center">
@@ -116,20 +131,39 @@ if(isset($_COOKIE['LoSessionToken'])){
                                 </div>
                             </div>
                        </div>                           
+                                              
+                       <div class="col-lg-6 col-md-6 mb-5">
+                           <!-- Project Card 1-->
+                           <div class="card overflow-hidden shadow rounded-4 border-0 mb-5">
+                               <div class="card-body p-0">
+                                   <div class="d-flex align-items-center">
+                                       <div class="p-5">
+                                           <h2 class="fw-bolder">Pagos</h2>
+                                           <p>En esta sección podrás realizar el pago de tu colegiatura y ver pagos anteriores.</p>
+                                           <a href="mis-pagos.php" class="btn btn-primary">Ir a mis pagos</a>
+                                        </div>
+                                        <img class="img-fluid" src="assets/pagosgradebook.jpg" alt="..." />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
+                                                
                     </div>
+               
                 </div>
             </section>
+            <?php } ?>
 
-            <!-- Call to action section-->
+            <!-- Call to action section
             <section class="py-5 bg-gradient-primary-to-secondary text-white">
                 <div class="container px-5 my-5">
                     <div class="text-center">
-                        <h2 class="display-4 fw-bolder mb-4">"El éxito es de todos, tú decides"</h2>
+                        <h2 class="display-4 fw-bolder mb-4">"El éxito es de todos, tú decides"</h2>-->
                         <!--<a class="btn btn-outline-light btn-lg px-5 py-3 fs-6 fw-bolder" href="contact.html">Mi perfil</a>-->
-                    </div>
+                    <!--</div>
                 </div>
             </section>
-        </main>
+        </main>-->
         <!-- Footer-->
         <footer class="bg-white py-4 mt-auto">
             <div class="container px-5">

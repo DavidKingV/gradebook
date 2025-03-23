@@ -15,6 +15,11 @@ class GroupController {
         $resultado = $this->groupModel->getGroupMaterial($groupId);
         return $resultado;
     }
+
+    public function verifyTypeGroup($groupId) {
+        $resultado = $this->groupModel->verifyTypeGroup($groupId);
+        return $resultado;
+    }
 }
 
 ?>
