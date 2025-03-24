@@ -25,7 +25,7 @@ if(isset($_COOKIE['LoSessionToken'])){
     exit;
 }
 
-echo $groupType;
+print_r($_SESSION['groupId']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
