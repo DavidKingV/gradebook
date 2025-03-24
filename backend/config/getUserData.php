@@ -11,7 +11,7 @@ class UserRepository {
     }
 
     public function findLocalUserById($uID){
-        $stmt = $this->connection->prepare("SELECT * FROM students WHERE id = ?");
+        $stmt = $this->connection->prepare("SELECT id_group, nombre, email, telefono FROM students WHERE id = ?");
         if ($stmt === false) {
             throw new \Exception($this->connection->error);
         }
@@ -40,22 +40,23 @@ class GetUserData{
         $this->userRepository = new UserRepository($connection);
     }
 
-    public function getLocalUserData($uID){
-        $user = $this->userRepository->findLocalUserById($uID);
-
-        if ($user) {
-
-            $_SESSION['userName'] = $user['nombre'];
-            $_SESSION['userEmail'] = $user['email'];
-            $_SESSION['groupId'] = $user['id_group'];
-            $_SESSION['userPhone'] = $user['telefono'];
-            $_SESSION['userPhoto'] = $_ENV['DEFAULT_PROFILE_PHOTO'];
-
-            return null;
-        } else {
-            return array("success" => false, "message" => "Usuario no encontrado");
+    public function getLocalUserData(int $uID): ?array{
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
         }
 
+        $user = $this->userRepository->findLocalUserById($uID);
+        if (!$user) {
+            return ['success' => false, 'message' => 'Usuario no encontrado'];
+        }
+
+        $_SESSION['userName']  = $user['nombre'];
+        $_SESSION['userEmail'] = $user['email'];
+        $_SESSION['groupId']   = $user['id_group'];
+        $_SESSION['userPhone'] = $user['telefono'];
+        $_SESSION['userPhoto'] = $_ENV['DEFAULT_PROFILE_PHOTO'];
+
+        return null;
     }
 
     public function getMicrosoftUserData($accessToken) {
