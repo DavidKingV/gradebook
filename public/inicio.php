@@ -24,6 +24,8 @@ if(isset($_COOKIE['LoSessionToken'])){
     header('Location: login.php?session=expired');
     exit;
 }
+
+echo $groupType;
 ?>
 <!DOCTYPE html>
 <html lang="es">
