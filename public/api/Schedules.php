@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../backend/controllers/ScheduleController.php';
 
+session_start();
+
 use Esmefis\Gradebook\DBConnection;
 
 $connection = new DBConnection();
