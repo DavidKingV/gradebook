@@ -12,7 +12,7 @@ $groupModel = new GroupModel($connection);
 
 if(isset($_COOKIE['LoSessionToken'])){
     $verifyLocalSession = verifyAuth::LocalSession($_COOKIE['LoSessionToken']);
-    $verifyTypeGroup = $groupModel->verifyTypeGroup($_SESSION['groupId']); 
+    $verifyTypeGroup = $groupModel->verifyTypeGroup($_SESSION['uID']); 
     
     $groupType = $verifyTypeGroup['type'];
 } else if (isset($_SESSION["adnanhussainturki/microsoft"]["accessToken"])) {
@@ -25,7 +25,6 @@ if(isset($_COOKIE['LoSessionToken'])){
     exit;
 }
 
-print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="es">
