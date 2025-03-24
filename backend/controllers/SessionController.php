@@ -30,48 +30,64 @@ class LoginController{
         $this->loginModel = new LoginModel($dbConnection);
     }
 
-    public function login($userData){
-        parse_str($userData, $userData);
+    public function login(string $userData): array{
+        // Convertir el string de entrada en un arreglo asociativo
+        parse_str($userData, $parsedData);
 
-        $user = filter_var($userData['user'], FILTER_SANITIZE_STRING);
-        $password = $userData['password'];
+        // Validar que existan las claves necesarias
+        if (!isset($parsedData['user'], $parsedData['password'])) {
+            return ['success' => false, 'message' => 'Datos incompletos'];
+        }
 
-        $userData = $this->loginModel->getUserData($user);
+        // Sanitizar y extraer los datos del usuario
+        $username = filter_var($parsedData['user'], FILTER_SANITIZE_STRING);
+        $password = $parsedData['password'];
 
-        if ($userData) {
-            $dbConnection = new DBConnection();
-            $connection = $dbConnection->getConnection();
-            $guserData = new GetUserData($connection);
-            
-            $stored_password = $userData['password'];
-            $stored_hashed_password = $userData['hashed_password'];
-    
-            if ($stored_hashed_password === null && $stored_password === $password) {
-                // La contraseña no está hashada en la base de datos, pero coincide con la contraseña original
-                // Actualizar la contraseña con su versión hashada                
-                $new_hashed_password = password_hash($password, PASSWORD_DEFAULT);
-                $updateSuccess = $this->loginModel->updateHashedPassword($userData['id'], $new_hashed_password);
-                
-                if (!$updateSuccess) {
-                    return array("success" => false, "message" => "Error al actualizar la contraseña, por favor intente de nuevo más tarde");
-                } else {
-                    SessionModel::startSession($userData['student_id'], $user);
-                    $guserData->getLocalUserData($userData['student_id']);
-                    return array("success" => true, "message" => "Inicio de sesión exitoso (y contraseña actualizada)", "uID" => $userData['student_id']);
-                }
-                
-            } elseif ($stored_hashed_password !== null && password_verify($password, $stored_hashed_password)) {
-                // La contraseña está hashada en la base de datos y coincide con la contraseña proporcionada
-                SessionModel::startSession($userData['student_id'], $user);
-                $guserData->getLocalUserData($userData['student_id']);
-                return array("success" => true, "message" => "Inicio de sesión exitoso", "uID" => $userData['student_id']);
-            } else {
-                // La contraseña no coincide
-                return array("success" => false, "message" => "Contraseña incorrecta");
+        // Obtener la información del usuario desde el modelo
+        $userRecord = $this->loginModel->getUserData($username);
+        if (!$userRecord) {
+            return ['success' => false, 'message' => 'Usuario no encontrado'];
+        }
+
+        // Preparar la conexión para obtener datos locales del usuario
+        $dbConnection = new DBConnection();
+        $connection = $dbConnection->getConnection();
+        $userDataGetter = new GetUserData($connection);
+
+        // Variables de la base de datos
+        $storedPassword = $userRecord['password'];
+        $storedHashedPassword = $userRecord['hashed_password'];
+
+        // Caso 1: La contraseña no está hasheada y coincide con la ingresada
+        if ($storedHashedPassword === null && $storedPassword === $password) {
+            // Actualizar la contraseña con su versión hashada
+            $newHashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $updateSuccess = $this->loginModel->updateHashedPassword($userRecord['id'], $newHashedPassword);
+            if (!$updateSuccess) {
+                return ['success' => false, 'message' => 'Error al actualizar la contraseña, por favor intente de nuevo más tarde'];
             }
-        } else {
-            // El usuario no se encontró en la base de datos
-            return array("success" => false, "message" => "Usuario no encontrado");
+
+            SessionModel::startSession($userRecord['student_id'], $username);
+            $userDataGetter->getLocalUserData($userRecord['student_id']);
+            return [
+                'success' => true,
+                'message' => 'Inicio de sesión exitoso (y contraseña actualizada)',
+                'uID' => $userRecord['student_id']
+            ];
+        }
+        // Caso 2: La contraseña está hasheada y coincide con la ingresada
+        elseif ($storedHashedPassword !== null && password_verify($password, $storedHashedPassword)) {
+            SessionModel::startSession($userRecord['student_id'], $username);
+            $userDataGetter->getLocalUserData($userRecord['student_id']);
+            return [
+                'success' => true,
+                'message' => 'Inicio de sesión exitoso',
+                'uID' => $userRecord['student_id']
+            ];
+        }
+        // Caso 3: La contraseña no coincide
+        else {
+            return ['success' => false, 'message' => 'Contraseña incorrecta'];
         }
     }
 

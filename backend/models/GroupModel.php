@@ -54,35 +54,32 @@ class GroupModel {
         }
     }
 
-    public function verifyTypeGroup(string $studentId): array
-{
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    public function verifyTypeGroup(string $studentId): array{
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-    try {
-        $sql = "
-            SELECT c.subarea, g.id
-            FROM students s
-            JOIN groups g ON s.id_group = g.id
-            JOIN carreers c ON g.id_carreer = c.id
-            WHERE s.id = ?
-        ";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bind_param('s', $studentId);
-        $stmt->execute();
+        try {
+            $sql = "
+                SELECT c.subarea
+                FROM students s
+                JOIN groups g ON s.id_group = g.id
+                JOIN carreers c ON g.id_carreer = c.id
+                WHERE s.id = ?
+            ";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bind_param('s', $studentId);
+            $stmt->execute();
 
-        $result = $stmt->get_result();
-        $stmt->close();
+            $result = $stmt->get_result();
+            $stmt->close();
 
-        if ($result->num_rows === 0) {
-            return ['success' => false, 'message' => 'No se encontró grupo para ese estudiante'];
+            if ($result->num_rows === 0) {
+                return ['success' => false, 'message' => 'No se encontró grupo para ese estudiante'];
+            }
+
+            return ['success' => true, 'type' => $result->fetch_assoc()['subarea']];
+        } catch (mysqli_sql_exception $e) {
+            return ['success' => false, 'message' => 'Error en la consulta: ' . $e->getMessage()];
         }
-
-        $_SESSION['groupId'] = $result->fetch_assoc()['id'];
-
-        return ['success' => true, 'type' => $result->fetch_assoc()['subarea']];
-    } catch (mysqli_sql_exception $e) {
-        return ['success' => false, 'message' => 'Error en la consulta: ' . $e->getMessage()];
     }
-}
     
 }
