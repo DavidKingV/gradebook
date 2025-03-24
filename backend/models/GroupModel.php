@@ -60,7 +60,7 @@ class GroupModel {
 
     try {
         $sql = "
-            SELECT c.subarea
+            SELECT c.subarea, g.id
             FROM students s
             JOIN groups g ON s.id_group = g.id
             JOIN carreers c ON g.id_carreer = c.id
@@ -76,6 +76,8 @@ class GroupModel {
         if ($result->num_rows === 0) {
             return ['success' => false, 'message' => 'No se encontró grupo para ese estudiante'];
         }
+
+        $_SESSION['groupId'] = $result->fetch_assoc()['id'];
 
         return ['success' => true, 'type' => $result->fetch_assoc()['subarea']];
     } catch (mysqli_sql_exception $e) {
