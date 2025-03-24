@@ -51,7 +51,7 @@ class GetUserData{
             $_SESSION['userPhone'] = $user['telefono'];
             $_SESSION['userPhoto'] = $_ENV['DEFAULT_PROFILE_PHOTO'];
 
-            return;
+            return null;
         } else {
             return array("success" => false, "message" => "Usuario no encontrado");
         }
